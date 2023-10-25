@@ -5,6 +5,7 @@ import { signIn, signOut } from 'next-auth/react';
 import { useState } from 'react';
 import UserOperations from '@/graphql/operations/user'
 import { CreateUsernameData, CreateUsernameVariables } from '../../util/types';
+import toast from 'react-hot-toast';
 
 
 interface AuthProps {
@@ -15,19 +16,35 @@ interface AuthProps {
 
 const Auth: React.FC<AuthProps> = ({ session, reloadSession}) => {
   const [username, setUsername] = useState('')
-  const [createUsername, { data, loading, error }] = useMutation<
+  const [createUsername, { loading, error }] = useMutation<
   CreateUsernameData, 
   CreateUsernameVariables
   >(UserOperations.Mutations.createUsername);
 
 
-  console.log("DATA FOR THE username", data, loading, error)
   const onSubmit = async () => {
     if (!username) return;
     try {
-      await createUsername({ variables: { username } });
-    } catch (e) {
-      console.log('onSubmit error', e)
+      const { data } = await createUsername({ variables: { username } });
+      if (!data?.createUsername) {
+        throw new Error();
+      }
+      if (data.createUsername.error) {
+        const { createUsername: { error } } = data;
+        throw new Error(error);
+      }
+
+      /**
+       * Reload session to get updated session
+       */
+
+      toast.success('Username successfully created')
+      reloadSession()
+
+    } catch (error: any) {
+      toast.error(error?.message)
+      console.log('onSubmit error', error)
+  
     }
   }
   return ( 
@@ -36,7 +53,7 @@ const Auth: React.FC<AuthProps> = ({ session, reloadSession}) => {
       {session ? (
         <>
           <Text fontSize='3xl'>Create a Username</Text>
-          <Button onClick={() => signOut()}> log out</Button>
+          {/* <Button onClick={() => signOut()}> log out</Button> */}
 
           <Input 
             placeholder='Enter a username' 
