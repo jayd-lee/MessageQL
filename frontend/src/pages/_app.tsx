@@ -10,7 +10,7 @@ export default function App({ Component, pageProps: {session, ...pageProps} }: A
   return (
   <ApolloProvider client={client}>
     <SessionProvider session={session}>
-      <ChakraProvider theme={theme}>
+      <ChakraProvider theme={theme} >
         <Component {...pageProps} />
         <Toaster/>
       </ChakraProvider>
