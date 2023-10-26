@@ -7,7 +7,7 @@ import { SearchUsersData, SearchUsersInput } from '@/util/types';
 interface ModalProps {
   isOpen: boolean
   onClose: () => void
-}
+ }
 
 const ConversationModal: React.FC<ModalProps> = ({
   isOpen,
@@ -32,7 +32,7 @@ const ConversationModal: React.FC<ModalProps> = ({
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent bg='#2d2d2d' pb={4}>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>Create a conversation</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form onSubmit={onSearch}>
@@ -41,9 +41,7 @@ const ConversationModal: React.FC<ModalProps> = ({
                 placeholder='Enter a username'
                 value={username}
                 onChange={(event) => setUsername(event.target.value)} />
-                <Button 
-                type='submit' 
-                disabled={!username}
+                <Button type='submit' disabled={!username} isLoading={loading}
                 >
                   Search
                 </Button>
