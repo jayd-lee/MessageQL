@@ -23,9 +23,9 @@ const resolvers = {
         const users = await prisma.user.findMany({ 
           where: {
             username: {
-            contains: searchedUsername,
-            not: myUsername,
-            mode: 'insensitive'
+              contains: searchedUsername,
+              not: myUsername,
+              mode: 'insensitive'
             }
           }
         })
@@ -33,11 +33,9 @@ const resolvers = {
         return users
 
       } catch(error: any) {
-
         console.log('searchUsers error', error)
         throw new ApolloError(error?.message)
       }
-
 
     },
   },
@@ -77,11 +75,8 @@ const resolvers = {
 
       } catch(error: any) {
           console.log('createUsername error', error)
-          return {
-            error: error?.message
-          }
+          return { error: error?.message }
       }
-      
 
     },
   },
