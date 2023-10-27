@@ -61,14 +61,14 @@ const Auth: React.FC<AuthProps> = ({ session, reloadSession}) => {
             onChange={(event) => setUsername(event.target.value)} />
           <Button width='100%' onClick={onSubmit} isLoading={loading}>Save</Button>
         </>
-      ) : 
+      ) : ( 
       <>
         <Text fontSize={'3xl'}>MessageQL</Text>
         <Button onClick={() => signIn('google')} leftIcon={<Image height='20px' src='/images/googlelogo.png' />}>
           Continue with Google
         </Button>
-      </>
-      }
+      </> 
+      )}
     </Stack>
   </Center> 
   

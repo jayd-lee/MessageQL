@@ -82,8 +82,8 @@ const ConversationModal: React.FC<ModalProps> = ({
             {data?.searchUsers && 
             <UserSearchList users={data.searchUsers} addParticipant={addParticipant} /> 
             }
-            { participants.length !== 0 &&
-            (
+            
+            { participants.length !== 0 && (
             <>
               <Participants 
               participants={participants} 
@@ -100,8 +100,7 @@ const ConversationModal: React.FC<ModalProps> = ({
               </Button>
 
             </>
-            )
-            } 
+            )} 
           </ModalBody>
 
         </ModalContent>
