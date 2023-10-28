@@ -1,6 +1,7 @@
 import { ApolloError } from 'apollo-server-core';
-import { ConversationsPopulated, GraphQLContext } from '../../util/types';
+import { ConversationCreatedSubscriptionPayload, ConversationsPopulated, GraphQLContext } from '../../util/types';
 import { Prisma } from '@prisma/client';
+import { withFilter } from 'graphql-subscriptions';
 
 
 const resolvers = {
@@ -8,7 +9,7 @@ const resolvers = {
     conversations: async(
       _: any, __: any, context: GraphQLContext
     ): Promise<Array<ConversationsPopulated>> => {
-      const { session, prisma } = context
+      const { session, prisma} = context
 
       if (!session?.user) throw new ApolloError('Not Authorized')
 
@@ -40,7 +41,7 @@ const resolvers = {
     createConversation: async(
       _: any, args: { participantIds: Array<string> }, context: GraphQLContext
       ): Promise<{ conversationId: string }> => {
-        const { session, prisma } = context
+        const { session, prisma, pubsub  } = context
         const { participantIds } = args
 
         if (!session?.user) throw new ApolloError('Not Authorized')
@@ -63,6 +64,9 @@ const resolvers = {
           })
 
           // emit a conversation_created event using pubsub
+          pubsub.publish('CONVERSATION_CREATED', {
+            conversationCreated: conversation
+          })
 
           return  {
             conversationId: conversation.id
@@ -74,6 +78,30 @@ const resolvers = {
         }
 
       }
+  },
+
+  Subscription: {
+    conversationCreated: {
+      // subscribe: (_: any, __: any, context: GraphQLContext) => {
+      //   const { pubsub } = context
+      //   return pubsub.asyncIterator(['CONVERSATION_CREATED'])
+      // }
+      subscribe: withFilter(
+        (_: any, __: any, context: GraphQLContext) => {
+          const { pubsub } = context
+          return pubsub.asyncIterator(['CONVERSATION_CREATED']) },
+        
+        (payload: ConversationCreatedSubscriptionPayload, _, context: GraphQLContext) => {
+          const { session } = context
+          const { conversationCreated : { participants }} = payload
+
+          const userIsParticipant = !!participants.find(
+            (p) => p.userId === session?.user.id
+          )
+          return userIsParticipant
+        }
+      )
+    }
   }
 }
 
