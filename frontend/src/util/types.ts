@@ -49,7 +49,7 @@ interface ConversationsParticipant {
   hasSeenLatestMessage: boolean
 }
 
-interface ConversationPopulated {
+export interface ConversationsPopulated {
   id: string
   participants: Array<ConversationsParticipant>
   latestMessage?: ConversationsLatestMessage
@@ -57,7 +57,7 @@ interface ConversationPopulated {
 }
 
 export interface ConversationsData {
-  conversations: Array<ConversationPopulated>
+  conversations: Array<ConversationsPopulated>
 }
 
 export interface CreateConversationData {

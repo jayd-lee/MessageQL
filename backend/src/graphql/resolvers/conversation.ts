@@ -1,5 +1,5 @@
 import { ApolloError } from 'apollo-server-core';
-import { ConversationPopulated, GraphQLContext } from '../../util/types';
+import { ConversationsPopulated, GraphQLContext } from '../../util/types';
 import { Prisma } from '@prisma/client';
 
 
@@ -7,7 +7,7 @@ const resolvers = {
   Query: {
     conversations: async(
       _: any, __: any, context: GraphQLContext
-    ): Promise<Array<ConversationPopulated>> => {
+    ): Promise<Array<ConversationsPopulated>> => {
       const { session, prisma } = context
 
       if (!session?.user) throw new ApolloError('Not Authorized')

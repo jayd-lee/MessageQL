@@ -36,10 +36,10 @@ export interface User {
  * Conversations
  */
 
-export type ConversationPopulated = Prisma.ConversationGetPayload<{ 
+export type ConversationsPopulated = Prisma.ConversationGetPayload<{ 
   include: typeof conversationPopulated 
 }>
 
-export type ParticipantPopulated = Prisma.ConversationParticipantGetPayload<{
+export type ParticipantsPopulated = Prisma.ConversationParticipantGetPayload<{
   include: typeof participantPopulated
 }>
