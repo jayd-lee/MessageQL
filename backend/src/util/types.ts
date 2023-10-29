@@ -47,14 +47,14 @@ export interface User {
  * Conversations
  */
 
-export type ConversationsPopulated = Prisma.ConversationGetPayload<{ 
+export type ConversationPopulated = Prisma.ConversationGetPayload<{ 
   include: typeof conversationPopulated 
 }>
 
-export type ParticipantsPopulated = Prisma.ConversationParticipantGetPayload<{
+export type ParticipantPopulated = Prisma.ConversationParticipantGetPayload<{
   include: typeof participantPopulated
 }>
 
 export interface ConversationCreatedSubscriptionPayload {
-  conversationCreated: ConversationsPopulated
+  conversationCreated: ConversationPopulated
 }

@@ -32,32 +32,36 @@ export interface SearchedUser {
  * Conversations
  */
 
-interface ConversationsUser {
+interface ConversationUser {
   id: string
   username: string
 }
 
-interface ConversationsLatestMessage {
+interface ConversationLatestMessage {
   id: string
-  sender: ConversationsUser
+  sender: ConversationUser
   body: string
   createdAt: string
 }
 
-interface ConversationsParticipant {
-  user: ConversationsUser
+interface ConversationParticipant {
+  user: ConversationUser
   hasSeenLatestMessage: boolean
 }
 
-export interface ConversationsPopulated {
+export interface ConversationPopulated {
   id: string
-  participants: Array<ConversationsParticipant>
-  latestMessage?: ConversationsLatestMessage
+  participants: Array<ConversationParticipant>
+  latestMessage?: ConversationLatestMessage
   updatedAt: string
 }
 
+export interface ParticipantPopulated {
+  user: ConversationUser
+}
+
 export interface ConversationsData {
-  conversations: Array<ConversationsPopulated>
+  conversations: Array<ConversationPopulated>
 }
 
 export interface CreateConversationData {
