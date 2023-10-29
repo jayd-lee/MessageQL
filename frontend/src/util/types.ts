@@ -1,3 +1,5 @@
+// import { ConversationPopulated } from '../../../backend/src/util/types'
+
 /**
  * Users
  */
@@ -29,6 +31,38 @@ export interface SearchedUser {
 /**
  * Conversations
  */
+
+interface ConversationUser {
+  id: string
+  username: string
+}
+
+interface ConversationLatestMessage {
+  id: string
+  sender: ConversationUser
+  body: string
+  createdAt: string
+}
+
+interface ConversationParticipant {
+  user: ConversationUser
+  hasSeenLatestMessage: boolean
+}
+
+export interface ConversationPopulated {
+  id: string
+  participants: Array<ConversationParticipant>
+  latestMessage?: ConversationLatestMessage
+  updatedAt: string
+}
+
+export interface ParticipantPopulated {
+  user: ConversationUser
+}
+
+export interface ConversationsData {
+  conversations: Array<ConversationPopulated>
+}
 
 export interface CreateConversationData {
   createConversation: {

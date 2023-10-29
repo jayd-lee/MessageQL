@@ -12,7 +12,7 @@ const UserSearchList: React.FC<UserSearchListProps> = ({
   return ( 
   <>
     {users.length === 0 ?
-    <Flex>
+    <Flex mt={6} justify='center'>
       <Text>No users found</Text> 
     </Flex>
      :
