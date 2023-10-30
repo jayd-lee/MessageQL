@@ -11,7 +11,9 @@ scalar Data
     createdAt: Date
   }
 
-
+  type Query {
+    messages(conversationId: String): [Message]
+  }
 
   type Mutation {
     sendMessage(
