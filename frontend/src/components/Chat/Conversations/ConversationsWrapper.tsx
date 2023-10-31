@@ -43,7 +43,7 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
         ) => {
           if (!subscriptionData?.data) return prev
           
-          const newConversation = subscriptionData.data.conversationCreated
+          const { data: { conversationCreated: newConversation } } = subscriptionData
           
           return Object.assign({}, prev, {
             conversations: [newConversation ,...prev.conversations]
@@ -66,12 +66,14 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
     py={6} 
     px={3}
   >
-    {/* Skeleton Loader */}
+  
     <ConversationsList 
-    session={session} 
-    conversations={conversationsData?.conversations || []}
-    onViewConversation={onViewConversation}
+      session={session} 
+      conversations={conversationsData?.conversations || []}
+      onViewConversation={onViewConversation}
+      conversationLoading={conversationsLoading}
     />
+   
   </Box> 
   );
 }
