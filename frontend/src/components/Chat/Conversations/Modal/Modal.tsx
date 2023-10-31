@@ -45,7 +45,7 @@ const ConversationModal: React.FC<ModalProps> = ({
   SearchUsersInput
   >(UserOperations.Queries.searchUsers)
 
-  const [createConveration, { loading: createConversationLoading}] = useMutation<
+  const [createConversation, { loading: createConversationLoading}] = useMutation<
   CreateConversationData, 
   CreateConversationInput
   >(ConversationOperations.Mutations.createConversation)
@@ -55,7 +55,7 @@ const ConversationModal: React.FC<ModalProps> = ({
     const participantIds = [userId, ...participants.map((p) => p.id)]
     try {
       // createConversation mutation
-      const { data } = await createConveration({ variables: { participantIds } })
+      const { data } = await createConversation({ variables: { participantIds } })
       
       if (!data?.createConversation) throw new Error('Failed to create converation')
 
@@ -63,11 +63,7 @@ const ConversationModal: React.FC<ModalProps> = ({
 
       router.push({ query: { conversationId }})
 
-      /**
-       * Clear state and close modal
-       * on successful creation
-       */
-
+      // Clear state and close modal on successful creation
       setParticipants([])
       setUsername('')
       onClose()
