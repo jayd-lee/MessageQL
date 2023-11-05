@@ -40,7 +40,9 @@ const Messages: React.FC<MessagesProps> = ({
         const { data: { messageSent: newMessage } } = subscriptionData
 
         return Object.assign({}, prev, {
-          messages: [newMessage, ...prev.messages]
+          messages: newMessage.sender.id === userId
+          ? prev.messages 
+          : [newMessage, ...prev.messages]
         })
       }
     })
@@ -65,7 +67,7 @@ const Messages: React.FC<MessagesProps> = ({
       <Flex direction='column-reverse' overflowY='scroll' height='100%'>
         {data.messages.map((message) => (
           // <MessageItem/>
-            <MessageItem message={message} sentByMe={message.sender.id === userId} />
+            <MessageItem key={message.id} message={message} sentByMe={message.sender.id === userId} />
         ))}
       </Flex>
     )
