@@ -57,7 +57,14 @@ export interface ConversationPopulated {
 }
 
 export interface ParticipantPopulated {
-  user: ConversationUser
+  user: {
+    id: string;
+    username: string | null;
+  };
+  id: string;
+  userId: string;
+  conversationId: string;
+  hasSeenLatestMessage: boolean;
 }
 
 export interface ConversationsData {
@@ -80,6 +87,15 @@ export interface ConversationSubscriptionData {
       conversationCreated: ConversationPopulated 
     } 
   }
+}
+
+export interface MarkConversationAsReadData {
+
+}
+
+export interface MarkConversationAsReadInput {
+  userId: string
+  conversationId: string
 }
 
 /**

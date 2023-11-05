@@ -10,7 +10,7 @@ import SkeletonLoader from '@/components/common/SkeletonLoader';
 interface ConversationListProps {
   session: Session
   conversations: Array<ConversationPopulated>
-  onViewConversation: (conversationId: string) => void
+  onViewConversation: (conversationId: string, hasSeenLatestMessage: boolean | undefined ) => void
   conversationLoading: boolean
 }
 
@@ -51,15 +51,21 @@ const ConversationsList: React.FC<ConversationListProps> = ({
         <SkeletonLoader count={7} height='75px' />
       </Box>
       :
-      conversations.map((conversation) => (
+      conversations.map((conversation) => {
+        
+        const participant = conversation.participants.find((p) => p.user.id === userId)
+
+
+        return (
           <ConversationItem 
           key={conversation.id} 
           userId={userId}
           conversation={conversation} 
-          onClick={() => onViewConversation(conversation.id)} 
+          onClick={() => onViewConversation(conversation.id, participant?.hasSeenLatestMessage)} 
           isSelected={conversation.id === router.query.conversationId}
-          />
-      ))
+          hasSeenLatestMessage={participant?.hasSeenLatestMessage}
+          /> )
+        })
     
     }
   </Box>
