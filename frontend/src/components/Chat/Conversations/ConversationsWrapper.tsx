@@ -1,8 +1,8 @@
 import { Box } from '@chakra-ui/react';
 import { Session } from 'next-auth';
-import { useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import ConversationsOperations from '../../../graphql/operations/conversations'
-import { ConversationsData, ConversationPopulated, ConversationSubscriptionData } from '@/util/types';
+import { ConversationsData, ConversationPopulated, ConversationSubscriptionData, MarkConversationAsReadInput, ParticipantPopulated } from '@/util/types';
 import ConversationsList from './ConversationsList';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -14,6 +14,9 @@ interface ConversationsWrapperProps{
 const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ 
   session 
 }) => {
+  const router = useRouter()
+  const { query: { conversationId } } = router
+  const { user: { id: userId} } = session
 
   const { 
     data: conversationsData, 
@@ -22,8 +25,9 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
     subscribeToMore
   } = useQuery<ConversationsData>(ConversationsOperations.Queries.conversations)
 
-  const router = useRouter()
-  const { query: { conversationId } } = router
+  const [markConversationAsRead] = useMutation<
+  { markConversationAsRead: boolean}, MarkConversationAsReadInput
+  >(ConversationsOperations.Mutations.markConversationAsRead)
 
   const onViewConversation = async(conversationId: string, hasSeenLatestMessage: boolean | undefined) => {
     
@@ -33,6 +37,68 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
     // 2. Mark the conversation as read
 
     if (hasSeenLatestMessage) return
+
+    try {
+      await markConversationAsRead({
+        variables: {
+          userId, 
+          conversationId
+        },
+        optimisticResponse: {
+          markConversationAsRead: true
+        },
+        update: (cache) => {
+          const participantsFragment = cache.readFragment<{ participants: Array<ParticipantPopulated> }>({
+            id: `Conversation:${conversationId}`,
+            fragment: gql`
+              fragment Participants on Conversation {
+                participants {
+                  user {
+                    id
+                    username
+                  }
+                  hasSeenLatestMessage
+                }
+              }
+            `
+          })
+          
+          if (!participantsFragment) return
+
+          const participants = [...participantsFragment.participants]
+
+          const userParticipantIndex = participants.findIndex((p) => p.user.id === userId)
+
+          if (userParticipantIndex === -1) return
+
+          const userParticipant = participants[userParticipantIndex];
+
+          // update participant to show latest message as read
+          participants[userParticipantIndex] = {
+            ...userParticipant,
+            hasSeenLatestMessage: true,
+          }
+
+          // update cache
+          cache.writeFragment({
+            id: `Conversation:${conversationId}`,
+            fragment: gql`
+              fragment UpdateParticipant on Conversation {
+                participants
+              }
+            `,
+            data: {
+              participants
+            }
+          })
+
+
+        }
+      })
+
+    } catch(error: any) {
+      console.log('onViewConversation error', error)
+    }
 
 
   }
