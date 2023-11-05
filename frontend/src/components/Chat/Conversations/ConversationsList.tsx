@@ -5,14 +5,18 @@ import { useState } from 'react';
 import { ConversationPopulated } from '../../../util/types'
 import ConversationItem from './ConversationItem';
 import { useRouter } from 'next/router';
+import SkeletonLoader from '@/components/common/SkeletonLoader';
 
 interface ConversationListProps {
   session: Session
   conversations: Array<ConversationPopulated>
   onViewConversation: (conversationId: string) => void
+  conversationLoading: boolean
 }
 
-const ConversationsList: React.FC<ConversationListProps> = ({ session, conversations, onViewConversation }) => {
+const ConversationsList: React.FC<ConversationListProps> = ({ 
+  session, conversations, onViewConversation, conversationLoading 
+}) => {
   const { user: { id: userId } } = session
   const [isOpen, setIsOpen] = useState(false)
   
@@ -37,15 +41,27 @@ const ConversationsList: React.FC<ConversationListProps> = ({ session, conversat
       </Text>
       <ConversationModal isOpen={isOpen} onClose={onClose} session={session} />
     </Box>
-    {conversations.map((conversation) => (
-        <ConversationItem 
-        key={conversation.id} 
-        userId={userId}
-        conversation={conversation} 
-        onClick={() => onViewConversation(conversation.id)} 
-        isSelected={conversation.id === router.query.conversationId}
-        />
-    ))}
+    {
+      conversationLoading? 
+      <Box
+        display='flex'
+        flexDirection='column'
+        gap={4}
+      >
+        <SkeletonLoader count={7} height='75px' />
+      </Box>
+      :
+      conversations.map((conversation) => (
+          <ConversationItem 
+          key={conversation.id} 
+          userId={userId}
+          conversation={conversation} 
+          onClick={() => onViewConversation(conversation.id)} 
+          isSelected={conversation.id === router.query.conversationId}
+          />
+      ))
+    
+    }
   </Box>
   );
 }

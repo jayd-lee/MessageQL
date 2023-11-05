@@ -73,3 +73,55 @@ export interface CreateConversationData {
 export interface CreateConversationInput {
   participantIds: Array<string>
 }
+
+export interface ConversationSubscriptionData {
+  subscriptionData: {
+    data: { 
+      conversationCreated: ConversationPopulated 
+    } 
+  }
+}
+
+/**
+ * Messages
+ */
+
+
+export interface MessageSender {
+  id: string;
+  username: string | null
+}
+
+export interface MessagePopulated {
+  id: string
+  createdAt: Date
+  updatedAt: Date
+  senderId: string
+  body: string
+  conversationId: string
+  sender: MessageSender
+}
+
+export interface MessagesData {
+  messages: Array<MessagePopulated>
+}
+
+export interface MessagesVariables {
+  conversationId: string
+}
+
+export interface SendMessageInput {
+  id: string
+  conversationId: string
+  senderId: string
+  body: string
+}
+
+export interface MessageSubscriptionData {
+  subscriptionData: {
+    data: {
+      messageSent: MessagePopulated
+    }
+  }
+}
+

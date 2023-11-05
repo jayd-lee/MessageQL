@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/react';
 import { Session } from 'next-auth';
 import { useQuery } from '@apollo/client';
 import ConversationsOperations from '../../../graphql/operations/conversations'
-import { ConversationsData, ConversationPopulated } from '@/util/types';
+import { ConversationsData, ConversationPopulated, ConversationSubscriptionData } from '@/util/types';
 import ConversationsList from './ConversationsList';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -36,14 +36,10 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
   const subscribeToNewConversations = () => {
     subscribeToMore({
       document: ConversationsOperations.Subscriptions.conversationCreated,
-      updateQuery: (
-        prev, 
-        { subscriptionData }
-        : { subscriptionData: { data: { conversationCreated: ConversationPopulated } }}
-        ) => {
+      updateQuery: (prev, { subscriptionData } : ConversationSubscriptionData) => {
           if (!subscriptionData?.data) return prev
           
-          const newConversation = subscriptionData.data.conversationCreated
+          const { data: { conversationCreated: newConversation } } = subscriptionData
           
           return Object.assign({}, prev, {
             conversations: [newConversation ,...prev.conversations]
@@ -66,12 +62,14 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
     py={6} 
     px={3}
   >
-    {/* Skeleton Loader */}
+  
     <ConversationsList 
-    session={session} 
-    conversations={conversationsData?.conversations || []}
-    onViewConversation={onViewConversation}
+      session={session} 
+      conversations={conversationsData?.conversations || []}
+      onViewConversation={onViewConversation}
+      conversationLoading={conversationsLoading}
     />
+   
   </Box> 
   );
 }
