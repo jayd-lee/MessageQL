@@ -94,8 +94,8 @@ export interface MessageSender {
 
 export interface MessagePopulated {
   id: string
-  createdAt: string // assuming date is serialized as a string
-  updatedAt: string // assuming date is serialized as a string
+  createdAt: Date
+  updatedAt: Date
   senderId: string
   body: string
   conversationId: string

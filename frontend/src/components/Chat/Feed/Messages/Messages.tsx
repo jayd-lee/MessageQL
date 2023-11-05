@@ -3,9 +3,9 @@ import { useQuery } from '@apollo/client';
 import { Flex, Stack } from '@chakra-ui/react';
 import MessageOperations from '../../../../graphql/operations/message'
 import { toast } from 'react-hot-toast';
-import message from '../../../../graphql/operations/message';
 import SkeletonLoader from '@/components/common/SkeletonLoader';
 import { useEffect } from 'react';
+import MessageItem from './MessageItem';
 
 interface MessagesProps {
   userId: string
@@ -65,9 +65,7 @@ const Messages: React.FC<MessagesProps> = ({
       <Flex direction='column-reverse' overflowY='scroll' height='100%'>
         {data.messages.map((message) => (
           // <MessageItem/>
-          <div key={message.id}>
-            {message.body}
-          </div>
+            <MessageItem message={message} sentByMe={message.sender.id === userId} />
         ))}
       </Flex>
     )
