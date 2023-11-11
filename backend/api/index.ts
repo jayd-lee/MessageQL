@@ -19,7 +19,6 @@ import bodyParser from 'body-parser';
 const { json } = bodyParser;
 
 
-
 async function main() {
   dotenv.config();
   const app = express();
