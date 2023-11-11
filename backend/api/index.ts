@@ -71,10 +71,18 @@ async function main() {
   });
   await server.start();
 
+  const clientUrls = process.env.CLIENT_URLS.split(',')
+
   const corsOptions = {
-    origin: process.env.CLIENT_ORIGIN,
+    origin: (origin, callback) => {
+      if (!origin || clientUrls.indexOf(origin) !== -1) {
+        callback(null, true)
+      } else {
+        callback(new Error('Not allowed by CORS'))
+      }
+    },
     credentials: true,
-  }
+  };
 
   app.use(
     '/graphql',
