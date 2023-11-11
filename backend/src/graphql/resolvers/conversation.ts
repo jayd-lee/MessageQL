@@ -1,7 +1,8 @@
 import { GraphQLError } from 'graphql';
-import { ConversationCreatedSubscriptionPayload, ConversationPopulated, GraphQLContext } from '../../util/types';
+import { ConversationCreatedSubscriptionPayload, ConversationPopulated, ConversationUpdatedSubscriptionPayload, GraphQLContext } from '../../util/types';
 import { Prisma } from '@prisma/client';
 import { withFilter } from 'graphql-subscriptions';
+import { userIsConversationParticipant } from '../../util/functions';
 
 
 const resolvers = {
@@ -130,13 +131,37 @@ const resolvers = {
         (payload: ConversationCreatedSubscriptionPayload, _, context: GraphQLContext) => {
           const { session } = context
           const { conversationCreated : { participants }} = payload
+          
+          if (!session?.user) throw new GraphQLError('Not Authorized')
+          // const userIsParticipant = !!participants.find(
+          //   (p) => p.userId === session?.user.id
+          // )
+          const { user: {id: userId} } =  session
 
-          const userIsParticipant = !!participants.find(
-            (p) => p.userId === session?.user.id
-          )
+          const userIsParticipant = userIsConversationParticipant(participants, userId)
+
           return userIsParticipant
         }
       )
+    },
+    conversationUpdate: {
+      subscribe: withFilter( 
+        (_: any, __: any, context: GraphQLContext) => {
+          const { pubsub } = context
+          return pubsub.asyncIterator(['CONVERSATION_UPDATED'])
+        }, 
+        (payload: ConversationUpdatedSubscriptionPayload, _, context: GraphQLContext) => {
+          
+          const { session } = context
+          if (!session?.user) throw new GraphQLError('Not Authorized')
+
+          const {conversationUpdated: { conversation: { participants }}} = payload
+          const { user: { id: userId }} =  session
+
+          const userIsParticipant = userIsConversationParticipant(participants, userId)
+
+          return userIsParticipant
+      })
     }
   }
 }
