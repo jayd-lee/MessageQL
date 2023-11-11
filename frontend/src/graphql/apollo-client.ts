@@ -5,14 +5,14 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { getSession } from 'next-auth/react';
 
 const httpLink = new HttpLink({
-  uri: 'http://localhost:4000/graphql',
+  uri: process.env.HTTPLINK_URI,
   credentials: 'include',
 })
 
 const wsLink = typeof window !== 'undefined' ? 
 new GraphQLWsLink(
   createClient({
-  url: 'ws://localhost:4000/graphql/subscriptions',
+  url: process.env.WSLINK_URI!,
   connectionParams: async() => ({
     session: await getSession(),
   })
