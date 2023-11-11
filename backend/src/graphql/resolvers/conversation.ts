@@ -144,7 +144,7 @@ const resolvers = {
         }
       )
     },
-    conversationUpdate: {
+    conversationUpdated: {
       subscribe: withFilter( 
         (_: any, __: any, context: GraphQLContext) => {
           const { pubsub } = context
