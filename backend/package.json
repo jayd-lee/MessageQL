@@ -7,7 +7,7 @@
     "dev": "nodemon api/index.ts",
     "compile": "tsc",
     "build": "tsc && prisma generate --schema=api/prisma/schema.prisma",
-    "start": "npm run compile && npm run build && node ./dist/index.js"
+    "start": "echo Build timestamp: $(date) && npm run compile && npm run build && node ./dist/index.js"
 
   },
   "keywords": [],
