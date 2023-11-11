@@ -14,6 +14,7 @@ const typeDefs = gql`
 
   type Subscription {
     conversationCreated: Conversation
+    conversationUpdated: ConversationUpdatedSubcriptionPayload
   }
 
   type Conversation {
@@ -22,6 +23,10 @@ const typeDefs = gql`
     participants: [Participant]
     createdAt: Date
     updatedAt: Date
+  }
+
+  type ConversationUpdatedSubcriptionPayload {
+    conversation: Conversation
   }
 
   type Participant {
