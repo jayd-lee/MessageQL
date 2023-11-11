@@ -8,8 +8,8 @@
     "compile": "tsc",
     "build": "tsc",
     "start": "node ./dist/index.js",
-    "postinstall": "prisma generate --schema=api/prisma/schema.prisma",
-    "vercel-build": "echo hello"
+    "vercel-build": "echo hello",
+    "postinstall": "prisma generate --schema=api/prisma/schema.prisma"
 
   },
   "keywords": [],
