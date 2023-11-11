@@ -5,14 +5,14 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { getSession } from 'next-auth/react';
 
 const httpLink = new HttpLink({
-  uri: process.env.HTTPLINK_URI,
+  uri: 'https://messageql-api.vercel.app/graphql',
   credentials: 'include',
 })
 
 const wsLink = typeof window !== 'undefined' ? 
 new GraphQLWsLink(
   createClient({
-  url: process.env.WSLINK_URI!,
+  url: 'ws://messageql-api.vercel.app/graphql/subscriptions',
   connectionParams: async() => ({
     session: await getSession(),
   })
