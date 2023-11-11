@@ -88,18 +88,17 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
           >
             Edit
           </MenuItem>
-          {/* <MenuItem
+          <MenuItem
             icon={<MdDeleteOutline fontSize={20} />}
             onClick={(event) => {
               event.stopPropagation();
-              onDeleteConversation(conversation.id);
+              // onDeleteConversation(conversation.id);
             }}
             bg="#2d2d2d"
             _hover={{ bg: "whiteAlpha.300" }}
           >
             Delete
-          </MenuItem> */}
-
+          </MenuItem>
           {/* {conversation.participants.length > 2 ? (
             <MenuItem
               icon={<BiLogOut fontSize={20} />}

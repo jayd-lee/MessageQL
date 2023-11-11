@@ -17,13 +17,16 @@ interface ConversationListProps {
 const ConversationsList: React.FC<ConversationListProps> = ({ 
   session, conversations, onViewConversation, conversationLoading 
 }) => {
+  const router = useRouter()
   const { user: { id: userId } } = session
+
   const [isOpen, setIsOpen] = useState(false)
   
   const onOpen = () => setIsOpen(true)
   const onClose = () => setIsOpen(false)
+
+  const sortedConversations = [...conversations].sort((a, b) => (b.updatedAt.valueOf() - a.updatedAt.valueOf()))
   
-  const router = useRouter()
 
   return ( 
   <Box width='100%'>
@@ -51,7 +54,7 @@ const ConversationsList: React.FC<ConversationListProps> = ({
         <SkeletonLoader count={7} height='75px' />
       </Box>
       :
-      conversations.map((conversation) => {
+      sortedConversations.map((conversation) => {
         
         const participant = conversation.participants.find((p) => p.user.id === userId)
 

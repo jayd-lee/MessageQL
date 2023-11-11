@@ -31,7 +31,7 @@ const MessagesHeader: React.FC<MessagesHeaderProps> = ({
       align="center"
       spacing={6}
       py={5}
-      px={{ base: 4, md: 0 }}
+      px={{ base: 4, md: 4 }}
       borderBottom="1px solid"
       borderColor="whiteAlpha.200"
     >

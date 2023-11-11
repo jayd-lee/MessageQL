@@ -41,7 +41,7 @@ interface ConversationLatestMessage {
   id: string
   sender: ConversationUser
   body: string
-  createdAt: string
+  createdAt: Date
 }
 
 interface ConversationParticipant {
@@ -51,9 +51,9 @@ interface ConversationParticipant {
 
 export interface ConversationPopulated {
   id: string
-  participants: Array<ConversationParticipant>
+  participants: Array<ParticipantPopulated>
   latestMessage?: ConversationLatestMessage
-  updatedAt: string
+  updatedAt: Date
 }
 
 export interface ParticipantPopulated {
