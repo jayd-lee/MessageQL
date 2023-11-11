@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon api/index.ts",
     "compile": "tsc",
-    "build": "prisma generate --schema=api/prisma/schema.prisma",
+    "build": "tsc && prisma generate --schema=api/prisma/schema.prisma",
     "start": "npm run compile && npm run build && node ./dist/index.js"
 
   },
