@@ -33,11 +33,15 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({
     ConversationsOperations.Subscriptions.conversationUpdated,
     {
       onData: ({ client, data }) => {
-        const { data: subscriptionData } = data;
+        const { data: subscriptionData } = data
 
-        console.log('firing')
+        if (!subscriptionData) return
 
-        if (!subscriptionData) return;
+        const { conversationUpdated: { conversation: updatedConversation }} = subscriptionData
+
+        const currentlyViewingConversation = updatedConversation.id === conversationId
+
+        if (currentlyViewingConversation) onViewConversation(conversationId, false)
 
       },
     }
