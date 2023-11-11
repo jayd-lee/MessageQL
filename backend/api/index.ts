@@ -4,17 +4,21 @@ import { expressMiddleware } from '@apollo/server/express4'
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import express from 'express'
 import http from 'http'
-import typeDefs from './graphql/typeDefs'
-import resolvers from './graphql/resolvers'
+import typeDefs from './graphql/typeDefs/index.js'
+import resolvers from './graphql/resolvers/index.js'
 import * as dotenv from 'dotenv'
 import { getSession } from 'next-auth/react'
-import { GraphQLContext, Session, SubscriptionContext } from './util/types'
+import { GraphQLContext, Session, SubscriptionContext } from './util/types.js'
 import { PrismaClient } from '@prisma/client'
 import { PubSub } from 'graphql-subscriptions'
 import { WebSocketServer } from 'ws'
 import { useServer } from 'graphql-ws/lib/use/ws'
-import { json } from 'body-parser'
 import cors from 'cors'
+
+import bodyParser from 'body-parser';
+const { json } = bodyParser;
+
+
 
 async function main() {
   dotenv.config();

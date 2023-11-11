@@ -1,9 +1,9 @@
 import { GraphQLError } from 'graphql'
-import { GraphQLContext, MessagePopulated, MessageSentSubscriptionPayload, SendMessageArguments } from '../../util/types'
+import { GraphQLContext, MessagePopulated, MessageSentSubscriptionPayload, SendMessageArguments } from '../../util/types.js'
 import { Prisma } from '@prisma/client'
 import { withFilter } from 'graphql-subscriptions'
-import { userIsConversationParticipant } from '../../util/functions'
-import { conversationPopulated } from './conversation'
+import { userIsConversationParticipant } from '../../util/functions.js'
+import { conversationPopulated } from './conversation.js'
 
 
 const resolvers = {
