@@ -72,8 +72,8 @@ async function main() {
   await server.start();
 
   const corsOptions = {
-    origin: '*',
-    credentials: false,
+    origin: ['https://messageql.vercel.app/', 'https://messageql.vercel.app'],
+    credentials: true,
   }
 
   app.use(
