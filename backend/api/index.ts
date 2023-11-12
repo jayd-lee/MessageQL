@@ -37,7 +37,7 @@ async function main() {
     { schema, context: async (ctx: SubscriptionContext): Promise<GraphQLContext> => {
         if (ctx.connectionParams && ctx.connectionParams.session) {
           const { session } = ctx.connectionParams
-
+          console.log(session)
           return { session, prisma, pubsub }
         }
         return { session: null, prisma, pubsub }
@@ -72,7 +72,7 @@ async function main() {
   await server.start();
 
   const corsOptions = {
-    origin: ['https://messageql.vercel.app/', 'https://messageql.vercel.app'],
+    origin: process.env.CLIENT_ORIGIN,
     credentials: true,
   }
 
